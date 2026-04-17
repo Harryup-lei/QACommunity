@@ -211,6 +211,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user'
 import { useWindowScroll } from '@vueuse/core'
+import userService from '@/services/userService'
 
 const router = useRouter()
 const userStore = useUserStore()
@@ -223,6 +224,23 @@ const showMobileMenu = ref(false)
 const showNotifications = ref(false)
 const unreadCount = ref(0)
 const notifications = ref([])
+
+// 初始化用户状态
+const initUser = async () => {
+  const token = localStorage.getItem('token')
+  const userId = localStorage.getItem('userId')
+  
+  if (token && userId) {
+    userStore.setToken(token)
+    try {
+      const user = await userService.getUserInfo(parseInt(userId))
+      userStore.setUser(user)
+    } catch (error) {
+      console.error('Failed to load user info:', error)
+      userStore.logout()
+    }
+  }
+}
 
 // 滚动监听
 const checkScroll = () => {
@@ -285,9 +303,12 @@ const handleClickOutside = (e) => {
   }
 }
 
-onMounted(() => {
+onMounted(async () => {
   checkScroll()
   window.addEventListener('click', handleClickOutside)
+  
+  // 初始化用户状态
+  await initUser()
 
   // 模拟通知数据
   notifications.value = [

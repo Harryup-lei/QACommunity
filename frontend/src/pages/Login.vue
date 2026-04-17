@@ -35,7 +35,7 @@
             />
           </div>
           <button class="submit-btn" :loading="loading" @click="onSubmit">
-            登 录
+            登录
           </button>
           <div class="link-section">
             <span>还没有账号？</span>
@@ -146,10 +146,23 @@ const onSubmit = async () => {
 }
 
 .card-header {
-  background: linear-gradient(135deg, var(--zh-red) 0%, var(--zh-red-dark) 100%);
+  background: linear-gradient(135deg, #8B0000 0%, #5C0000 100%);
   padding: 40px 32px;
   text-align: center;
   position: relative;
+  border-bottom: 3px solid #D4AF37;
+}
+
+.card-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='rgba(255,255,255,0.03)' stroke-width='1'/%3E%3C/svg%3E");
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 .card-header::after {
@@ -159,7 +172,7 @@ const onSubmit = async () => {
   left: 0;
   right: 0;
   height: 4px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 4'%3E%3Cpath d='M0 4 Q25 0 50 4 T100 4' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E") repeat-x;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 4'%3E%3Cpath d='M0 4 Q25 0 50 4 T100 4' fill='none' stroke='%23D4AF37' stroke-width='2'/%3E%3C/svg%3E") repeat-x;
 }
 
 .logo-section {
@@ -174,33 +187,36 @@ const onSubmit = async () => {
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.15);
+  background: linear-gradient(135deg, #D4AF37 0%, #B8962E 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid rgba(255,255,255,0.3);
+  border: 3px solid #D4AF37;
+  box-shadow: 0 2px 8px rgba(212, 175, 55, 0.4);
   text-decoration: none;
 }
 
 .logo-icon span {
   font-family: var(--font-serif);
   font-size: 24px;
-  color: white;
+  color: #5C0000;
   font-weight: 600;
 }
 
 .logo-title {
   font-family: var(--font-serif);
   font-size: 28px;
-  color: white;
+  color: #D4AF37;
   font-weight: 600;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 .logo-subtitle {
   font-family: var(--font-serif);
   font-size: 14px;
-  color: rgba(255,255,255,0.7);
+  color: #D4AF37;
   letter-spacing: 4px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 .form-section {
@@ -214,9 +230,10 @@ const onSubmit = async () => {
 .input-group label {
   display: block;
   font-size: 14px;
-  color: var(--zh-ink-light);
+  color: #5C0000;
   margin-bottom: 8px;
   font-family: var(--font-serif);
+  font-weight: 600;
 }
 
 .input-group input {
@@ -225,6 +242,7 @@ const onSubmit = async () => {
   border: 1px solid var(--zh-paper-dark);
   border-radius: 2px;
   font-size: 15px;
+  color: #2C2C2C;
   background: #FDFCFB;
   transition: all 0.2s;
   box-sizing: border-box;
@@ -240,21 +258,23 @@ const onSubmit = async () => {
 .submit-btn {
   width: 100%;
   padding: 14px;
-  background: linear-gradient(135deg, var(--zh-red) 0%, var(--zh-red-dark) 100%);
-  color: white;
-  border: none;
-  border-radius: 2px;
+  background: linear-gradient(135deg, #8B0000 0%, #5C0000 100%);
+  color: #D4AF37;
+  border: 2px solid #D4AF37;
+  border-radius: 4px;
   font-size: 16px;
   font-family: var(--font-serif);
-  letter-spacing: 4px;
+  font-weight: 600;
   cursor: pointer;
   transition: all 0.3s;
   margin-top: 8px;
 }
 
 .submit-btn:hover {
+  background: #D4AF37;
+  color: #5C0000;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(196,30,58,0.3);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.4);
 }
 
 .submit-btn:disabled {
@@ -273,9 +293,10 @@ const onSubmit = async () => {
 }
 
 .link-section .highlight {
-  color: var(--zh-red);
+  color: #D4AF37;
   cursor: pointer;
   text-decoration: underline;
+  font-weight: 600;
   margin-left: 4px;
 }
 
