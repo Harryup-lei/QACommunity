@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.qa.mapper.VoteMapper">
+
+    <!-- 查询用户对某个目标的点赞 -->
+    <select id="selectByUserAndTarget" resultType="Vote">
+        SELECT * FROM votes
+        WHERE user_id = #{userId} AND target_type = #{targetType} AND target_id = #{targetId}
+    </select>
+
+    <!-- 统计目标被点赞数 -->
+    <select id="countByTarget" resultType="long">
+        SELECT COUNT(*) FROM votes
+        WHERE target_type = #{targetType} AND target_id = #{targetId}
+    </select>
+
+    <!-- 删除用户对某个目标的点赞 -->
+    <delete id="deleteByUserAndTarget">
+        DELETE FROM votes
+        WHERE user_id = #{userId} AND target_type = #{targetType} AND target_id = #{targetId}
+    </delete>
+
+</mapper>

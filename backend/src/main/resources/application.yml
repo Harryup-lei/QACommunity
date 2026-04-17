@@ -1,0 +1,81 @@
+spring:
+  application:
+    name: qa-community
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/qa_community?useSSL=false&serverTimezone=UTC&characterEncoding=utf8&allowPublicKeyRetrieval=true&allowMultiQueries=true
+    username: root
+    password: ${DB_PASSWORD:123456}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    open-in-view: false
+
+  data:
+    redis:
+      host: localhost
+      password:
+      port: 6379
+      database: 0
+      timeout: 2000
+      lettuce:
+        pool:
+          max-active: 8
+          max-idle: 8
+          min-idle: 0
+          max-wait: -1ms
+#  redis:
+#    host: localhost
+#    port: 6379
+#    password:
+#    database: 0
+#    timeout: 2000
+#    lettuce:
+#      pool:
+#        max-active: 8
+#        max-idle: 8
+#        min-idle: 0
+#        max-wait: -1ms
+
+logging:
+  level:
+    root: INFO
+    com.qa: DEBUG
+  pattern:
+    console: '%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n'
+
+mybatis-plus:
+  mapper-locations: classpath*:mapper/*.xml
+  type-aliases-package: com.qa.entity
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    jdbc-type-for-null: null
+
+
+server:
+  port: 8080
+  servlet:
+    context-path: /api/v1
+
+# JWT 配置
+jwt:
+  secret: YourSecretKeyForJWTTokenGenerationMustBeAtLeast256BitsLong
+  expiration: 86400000  # 24小时，单位毫秒
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

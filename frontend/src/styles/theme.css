@@ -1,0 +1,82 @@
+/* 主题变量 - 新中式配色 */
+:root {
+  /* 主色 */
+  --zh-red: #C41E3A;
+  --zh-red-light: #E57373;
+  --zh-red-dark: #A01830;
+
+  --zh-blue: #3D5A80;
+  --zh-blue-light: #5A7BA6;
+  --zh-blue-dark: #2D4460;
+
+  /* 背景色 */
+  --zh-paper: #F5F3E8;
+  --zh-paper-dark: #EBE8DC;
+  --zh-paper-darker: #DCD9CC;
+
+  /* 文字色 */
+  --zh-ink: #2C2C2C;
+  --zh-ink-light: #5C5C5C;
+  --zh-ink-lighter: #8C8C8C;
+
+  /* 强调色 */
+  --zh-gold: #D4AF37;
+  --zh-jade: #00A86B;
+  --zh-cinnabar: #C41E3A;
+
+  /* 功能色 */
+  --success: #00A86B;
+  --success-light: rgba(0, 168, 107, 0.1);
+  --warning: #D4AF37;
+  --warning-light: rgba(212, 175, 55, 0.1);
+  --error: #C41E3A;
+  --error-light: rgba(196, 30, 58, 0.1);
+  --info: #3D5A80;
+  --info-light: rgba(61, 90, 128, 0.1);
+
+  /* 字体 */
+  --font-serif: 'Noto Serif SC', '思源宋体', '宋体', serif;
+  --font-sans: 'Noto Sans SC', '思源黑体', '微软雅黑', sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+  /* 阴影 */
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.16);
+  --shadow-xl: 0 12px 40px rgba(0,0,0,0.2);
+
+  /* 圆角 */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* 间距 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 16px;
+  --spacing-lg: 24px;
+  --spacing-xl: 32px;
+
+  /* 过渡 */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.5s ease;
+
+  /* 层级 */
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal: 300;
+  --z-toast: 400;
+}
+
+/* 暗色主题变量（预留） */
+:root.dark {
+  --zh-paper: #1A1A2E;
+  --zh-paper-dark: #16213E;
+  --zh-paper-darker: #0F3460;
+  --zh-ink: #E8E8E8;
+  --zh-ink-light: #B8B8B8;
+  --zh-ink-lighter: #888888;
+}
