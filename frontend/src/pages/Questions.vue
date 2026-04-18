@@ -276,13 +276,14 @@
 </template>
 
 <script setup>
-import { ref, reactive, onMounted } from 'vue'
+import { ref, reactive, onMounted , createApp} from 'vue'
 import { useRouter } from 'vue-router'
 import questionService from '@/services/questionService'
 import voteService from '@/services/voteService'
 import { ElMessage } from 'element-plus'
 
 const router = useRouter()
+
 
 // 状态
 const loading = ref(false)

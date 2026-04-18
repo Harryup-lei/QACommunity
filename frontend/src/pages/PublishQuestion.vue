@@ -3,12 +3,12 @@
     <div class="page-container">
       <div class="publish-card">
         <div class="card-header">
-          <router-link to="/questions" class="back-link">
+          <button type="button" @click="goBack" class="back-btn">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M19 12H5M12 19l-7-7 7-7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             </svg>
             返回问题列表
-          </router-link>
+          </button>
           <h1 class="page-title">提问</h1>
           <p class="page-subtitle">提出你的问题，与社区共同探讨</p>
         </div>
@@ -90,6 +90,10 @@ import questionService from '@/services/questionService'
 const router = useRouter()
 const loading = ref(false)
 
+const goBack = () => {
+  router.back()
+}
+
 const availableTags = [
   'Java', 'Spring Boot', 'MySQL', 'Vue.js', 
   'API', '数据库', '前端', '后端', 'Python'
@@ -166,9 +170,24 @@ const onCancel = () => {
 }
 
 .card-header {
-  background: linear-gradient(135deg, var(--zh-red) 0%, var(--zh-red-dark) 100%);
+  background: linear-gradient(135deg, #8B0000 0%, #5C0000 100%);
   padding: 32px;
   position: relative;
+  border-bottom: 3px solid #D4AF37;
+  z-index: 1;
+}
+
+/* 装饰花纹 */
+.card-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: -1;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='45' fill='none' stroke='rgba(255,255,255,0.03)' stroke-width='1'/%3E%3C/svg%3E");
+  opacity: 0.5;
 }
 
 .card-header::after {
@@ -176,20 +195,48 @@ const onCancel = () => {
   position: absolute;
   bottom: -1px;
   left: 0;
+  z-index: -1;
   right: 0;
   height: 4px;
-  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 4'%3E%3Cpath d='M0 4 Q25 0 50 4 T100 4' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E") repeat-x;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 4'%3E%3Cpath d='M0 4 Q25 0 50 4 T100 4' fill='none' stroke='%23D4AF37' stroke-width='2'/%3E%3C/svg%3E") repeat-x;
+}
+
+.back-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #D4AF37;
+  font-size: 14px;
+  margin-bottom: 16px;
+  transition: color 0.2s;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-serif);
+  position: relative;
+  z-index: 10;
+  padding: 0;
+}
+
+.back-btn:hover {
+  color: white;
+}
+
+.back-btn svg {
+  width: 18px;
+  height: 18px;
 }
 
 .back-link {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  color: rgba(255,255,255,0.8);
+  color: #D4AF37;
   text-decoration: none;
   font-size: 14px;
   margin-bottom: 16px;
   transition: color 0.2s;
+  font-family: var(--font-serif);
 }
 
 .back-link:hover {
@@ -203,15 +250,18 @@ const onCancel = () => {
 
 .page-title {
   font-family: var(--font-serif);
-  font-size: 28px;
-  color: white;
+  font-size: 32px;
+  color: #D4AF37;
   font-weight: 600;
   margin-bottom: 8px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
 }
 
 .page-subtitle {
   font-size: 14px;
-  color: rgba(255,255,255,0.7);
+  color: rgba(255,255,255,0.8);
+  font-family: var(--font-serif);
+  letter-spacing: 2px;
 }
 
 .card-body {
@@ -226,9 +276,9 @@ const onCancel = () => {
   display: block;
   font-family: var(--font-serif);
   font-size: 15px;
-  color: var(--zh-ink);
+  color: #5C0000;
   margin-bottom: 10px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .form-input {
@@ -237,16 +287,17 @@ const onCancel = () => {
   border: 1px solid var(--zh-paper-dark);
   border-radius: 2px;
   font-size: 15px;
-  background: var(--zh-paper);
+  background: #FDFCFB;
   transition: all 0.2s;
   box-sizing: border-box;
+  color: #2C2C2C;
 }
 
 .form-input:focus {
   outline: none;
-  border-color: var(--zh-red);
+  border-color: #5C0000;
   background: white;
-  box-shadow: 0 0 0 3px rgba(196,30,58,0.1);
+  box-shadow: 0 0 0 3px rgba(92,0,0,0.1);
 }
 
 .form-textarea {
@@ -255,19 +306,20 @@ const onCancel = () => {
   border: 1px solid var(--zh-paper-dark);
   border-radius: 2px;
   font-size: 15px;
-  background: var(--zh-paper);
+  background: #FDFCFB;
   transition: all 0.2s;
   resize: vertical;
   font-family: inherit;
   line-height: 1.6;
   box-sizing: border-box;
+  color: #2C2C2C;
 }
 
 .form-textarea:focus {
   outline: none;
-  border-color: var(--zh-red);
+  border-color: #5C0000;
   background: white;
-  box-shadow: 0 0 0 3px rgba(196,30,58,0.1);
+  box-shadow: 0 0 0 3px rgba(92,0,0,0.1);
 }
 
 .form-hint {
@@ -285,24 +337,26 @@ const onCancel = () => {
 
 .tag-option {
   padding: 8px 16px;
-  border: 1px solid var(--zh-paper-dark);
+  border: 1px solid #D4AF37;
   border-radius: 2px;
-  background: white;
+  background: transparent;
   font-size: 14px;
-  color: var(--zh-ink-light);
+  color: #D4AF37;
   cursor: pointer;
   transition: all 0.2s;
+  font-family: var(--font-serif);
 }
 
 .tag-option:hover {
-  border-color: var(--zh-red);
-  color: var(--zh-red);
+  border-color: #8B0000;
+  color: #8B0000;
+  background: rgba(139,0,0,0.05);
 }
 
 .tag-option.selected {
-  background: var(--zh-red);
-  border-color: var(--zh-red);
-  color: white;
+  background: linear-gradient(135deg, #8B0000 0%, #5C0000 100%);
+  border-color: #D4AF37;
+  color: #D4AF37;
 }
 
 .form-actions {
@@ -359,24 +413,27 @@ const onCancel = () => {
 
 .zh-btn-outline {
   background: transparent;
-  border: 1px solid var(--zh-paper-darker);
-  color: var(--zh-ink-light);
+  border: 1px solid #5C0000;
+  color: #5C0000;
 }
 
 .zh-btn-outline:hover {
-  border-color: var(--zh-ink);
-  color: var(--zh-ink);
+  border-color: #8B0000;
+  color: #8B0000;
+  background: rgba(92,0,0,0.05);
 }
 
 .zh-btn-primary {
-  background: linear-gradient(135deg, var(--zh-red) 0%, var(--zh-red-dark) 100%);
-  border: none;
-  color: white;
+  background: linear-gradient(135deg, #8B0000 0%, #5C0000 100%);
+  border: 2px solid #D4AF37;
+  color: #D4AF37;
 }
 
 .zh-btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(196,30,58,0.3);
+  box-shadow: 0 4px 12px rgba(212,175,55,0.4);
+  background: #D4AF37;
+  color: #5C0000;
 }
 
 @media (max-width: 768px) {
