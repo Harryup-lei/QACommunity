@@ -79,8 +79,19 @@ const onSubmit = async () => {
 
   loading.value = true
   try {
-    const token = await userService.login(form.value.username, form.value.password)
-    const userId = JSON.parse(atob(token.split('.')[1])).sub
+    // Result 包装格式: { code: 0, message: "success", data: "token-string" }
+    const result = await userService.login(form.value.username, form.value.password)
+
+    // 安全检查：确保返回的是有效对象
+    if (!result || result.code !== 0 || !result.data) {
+      throw new Error(result?.message || '登录失败')
+    }
+
+    const token = result.data
+
+    // 解析 JWT payload 获取 userId (第二部分)
+    const payload = JSON.parse(atob(token.split('.')[1]))
+    const userId = payload.sub
 
     localStorage.setItem('token', token)
     localStorage.setItem('userId', userId)
@@ -94,7 +105,7 @@ const onSubmit = async () => {
     router.push('/')
   } catch (error) {
     console.error('Login error:', error)
-    ElMessage.error('登录失败：用户名或密码错误')
+    ElMessage.error(error.message || '登录失败：用户名或密码错误')
   } finally {
     loading.value = false
   }
