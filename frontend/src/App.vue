@@ -37,20 +37,21 @@
         <!-- 用户区域 -->
         <div class="header-actions">
           <!-- 通知按钮 -->
-          <button v-if="userStore.user" class="icon-btn" @click="toggleNotifications">
+          <button v-if="userStore.user" class="icon-btn" @click.stop="toggleNotifications">
             <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" stroke-width="2" stroke-linecap="round"/>
               <path d="M13.73 21a2 2 0 0 1-3.46 0" stroke-width="2" stroke-linecap="round"/>
             </svg>
             <span v-if="unreadCount > 0" class="badge">{{ unreadCount }}</span>
+            <span class="btn-tooltip">通知</span>
           </button>
 
           <!-- 发布按钮 -->
-          <router-link v-if="userStore.user" to="/publish-question" class="zh-btn zh-btn-primary">
-            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <router-link v-if="userStore.user" to="/publish-question" class="icon-btn" title="发布问题">
+            <svg class="icon publish-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
               <path d="M12 5v14M5 12h14" stroke-width="2" stroke-linecap="round"/>
             </svg>
-            <span class="btn-text">提问</span>
+            <span class="btn-tooltip">发布问题</span>
           </router-link>
 
           <!-- 用户菜单 -->
@@ -229,11 +230,30 @@ const notifications = ref([])
 const initUser = async () => {
   const token = localStorage.getItem('token')
   const userId = localStorage.getItem('userId')
-  
+  const savedUser = localStorage.getItem('user')
+
+  // 如果有保存的用户信息，直接恢复
+  if (savedUser) {
+    try {
+      const userData = JSON.parse(savedUser)
+      if (token && userId) {
+        userStore.setToken(token)
+        userStore.setUser(userData)
+        return
+      }
+    } catch (e) {
+      // localStorage 数据损坏，清除
+      localStorage.removeItem('user')
+    }
+  }
+
+  // 如果有 token 但没有用户信息，从服务器获取
   if (token && userId) {
     userStore.setToken(token)
     try {
-      const user = await userService.getUserInfo(parseInt(userId))
+      const userResult = await userService.getUserInfo(parseInt(userId))
+      // 处理 Result 包装格式: { code: 0, data: {...} }
+      const user = userResult?.data || userResult
       userStore.setUser(user)
     } catch (error) {
       console.error('Failed to load user info:', error)
@@ -364,18 +384,37 @@ onUnmounted(() => {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, var(--zh-red) 0%, var(--zh-red-dark) 100%);
+  background: linear-gradient(135deg, #8B0000 0%, #5C0000 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 12px rgba(196, 30, 58, 0.3);
+  box-shadow: 0 4px 12px rgba(139, 0, 0, 0.3), inset 0 2px 4px rgba(255,255,255,0.2);
+  border: 2px solid #D4AF37;
+  position: relative;
 }
 
+/* 印章艺术字效果 */
 .logo-char {
-  font-family: var(--font-serif);
-  font-size: 20px;
-  color: white;
-  font-weight: 600;
+  font-family: "SimSun", "宋体", serif;
+  font-size: 28px;
+  color: #D4AF37;
+  font-weight: normal;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  text-shadow: 1px 1px 0 rgba(0,0,0,0.3);
+  /* 竖排文字 */
+  writing-mode: horizontal-tb;
+}
+
+/* 外发光效果 */
+.logo-char::after {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 2px;
 }
 
 .logo-text {
@@ -416,8 +455,8 @@ onUnmounted(() => {
 }
 
 .nav-icon {
-  width: 18px;
-  height: 18px;
+  width: 16px;
+  height: 16px;
 }
 
 /* 头部操作区 */
@@ -446,8 +485,8 @@ onUnmounted(() => {
 }
 
 .icon-btn .icon {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   color: var(--zh-ink-light);
 }
 
@@ -466,6 +505,59 @@ onUnmounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* 按钮提示文字 */
+.btn-tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--zh-ink);
+  color: white;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 100;
+}
+
+.icon-btn:hover .btn-tooltip,
+.icon-btn:hover .publish-tooltip {
+  opacity: 1;
+  visibility: visible;
+  top: calc(100% + 4px);
+}
+
+/* 发布按钮图标略大 */
+.publish-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.publish-tooltip {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--zh-ink);
+  color: white;
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+}
+
+.publish-btn:hover .publish-tooltip {
+  opacity: 1;
+  visibility: visible;
+  top: calc(100% + 4px);
 }
 
 /* 用户菜单 */
@@ -613,7 +705,7 @@ onUnmounted(() => {
   right: 0;
   bottom: 0;
   background: rgba(0, 0, 0, 0.3);
-  z-index: calc(var(--z-modal) - 1);
+  z-index: 9999;
   display: flex;
   justify-content: flex-end;
 }

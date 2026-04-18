@@ -866,10 +866,14 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  position: relative;
+  z-index: 0;
 }
 
 .sidebar-card {
   overflow: hidden;
+  position: relative;
+  z-index: 0;
 }
 
 .card-header {

@@ -93,9 +93,9 @@ const onSubmit = async () => {
     const payload = JSON.parse(atob(token.split('.')[1]))
     const userId = payload.sub
 
+    // 保存 token 和 userId
     localStorage.setItem('token', token)
     localStorage.setItem('userId', userId)
-
     userStore.setToken(token)
 
     // getUserInfo 也返回 Result 包装，需要取 data

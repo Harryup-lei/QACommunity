@@ -56,11 +56,11 @@
 
           <div class="form-actions">
             <button class="zh-btn zh-btn-outline" @click="onCancel">取消</button>
-            <button class="zh-btn zh-btn-primary" :loading="loading" @click="onSubmit">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <button class="zh-btn zh-btn-primary submit-btn" :loading="loading" @click="onSubmit" title="发布问题">
+              <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                 <path d="M12 5v14M5 12h14" stroke-width="2" stroke-linecap="round"/>
               </svg>
-              发布问题
+              <span>发布</span>
             </button>
           </div>
         </div>
@@ -434,6 +434,17 @@ const onCancel = () => {
   box-shadow: 0 4px 12px rgba(212,175,55,0.4);
   background: #D4AF37;
   color: #5C0000;
+}
+
+/* 纯图标按钮 */
+.zh-btn-primary.submit-btn {
+  padding: 12px;
+  min-width: auto;
+}
+
+.zh-btn-primary.submit-btn .btn-icon {
+  width: 20px;
+  height: 20px;
 }
 
 @media (max-width: 768px) {

@@ -66,7 +66,7 @@
 
   /* 层级 */
   --z-dropdown: 100;
-  --z-sticky: 200;
+  --z-sticky: 9998;
   --z-modal: 300;
   --z-toast: 400;
 }
