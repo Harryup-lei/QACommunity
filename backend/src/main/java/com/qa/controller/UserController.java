@@ -3,13 +3,21 @@ package com.qa.controller;
 import com.qa.common.Result;
 import com.qa.dto.LoginRequest;
 import com.qa.dto.RegisterRequest;
+import com.qa.dto.UpdateUserRequest;
 import com.qa.dto.UserDTO;
 import com.qa.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * 用户 API 控制器
@@ -64,9 +72,10 @@ public class UserController {
 
     @PutMapping("/{id}")
     public Result<UserDTO> updateUserInfo(@PathVariable Long id,
-                                          @RequestParam(required = false) String avatar,
-                                          @RequestParam(required = false) String bio) {
+                                          @RequestBody UpdateUserRequest request) {
         try {
+            String avatar = request.getAvatar();
+            String bio = request.getBio();
             var user = userService.updateUserInfo(id, avatar, bio);
             var dto = UserDTO.builder()
                     .id(user.getId())
@@ -97,6 +106,18 @@ public class UserController {
             return Result.success(userService.getPointsRanking(limit));
         } catch (Exception e) {
             return Result.error(e.getMessage());
+        }
+    }
+
+    /**
+     * 上传头像文件
+     */
+    @PostMapping("/upload-avatar")
+    public Result<String> uploadAvatar(@RequestParam("file") MultipartFile file) {
+        try {
+            return userService.uploadAvatar(file);
+        } catch (Exception e) {
+            return Result.error(1, "文件上传失败: " + e.getMessage());
         }
     }
 }

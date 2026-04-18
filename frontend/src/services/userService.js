@@ -14,8 +14,16 @@ const userService = {
   },
 
   updateUserInfo(id, avatar, bio) {
-    return api.put(`/users/${id}`, null, {
-      params: { avatar, bio }
+    return api.put(`/users/${id}`, { avatar, bio })
+  },
+
+  uploadAvatar(file) {
+    const formData = new FormData()
+    formData.append('file', file)
+    return api.post('/users/upload-avatar', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
     })
   },
 

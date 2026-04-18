@@ -3,6 +3,7 @@ package com.qa.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.qa.common.Result;
 import com.qa.dto.UserDTO;
 import com.qa.entity.User;
 import com.qa.mapper.UserMapper;
@@ -12,8 +13,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -164,4 +171,48 @@ public class UserServiceImpl implements UserService {
         wrapper.eq(User::getUsername, username);
         return userMapper.selectCount(wrapper) > 0;
     }
+
+	@Override
+	public Result<String> uploadAvatar(MultipartFile file) {
+		if (file.isEmpty()) {
+			return Result.error(1, "文件未空");
+		}
+
+		// 验证文件类型
+		String contentType = file.getContentType();
+		if (contentType == null || !contentType.startsWith("image/")) {
+			return Result.error(1, "只能上传图片文件");
+		}
+
+		// 获取文件扩展名
+		String originalFilename = file.getOriginalFilename();
+		String extension = "";
+		if (originalFilename != null && originalFilename.contains(".")) {
+			extension = originalFilename.substring(originalFilename.lastIndexOf("."));
+		}
+
+		// 生成唯一文件名
+		String filename = UUID.randomUUID().toString() + extension;
+
+		// 保存到文件目录
+		Path uploadPath = Paths.get("D:", "code", "ClaudeCode", "QACommunity", "files", "avatars");
+		if (!Files.exists(uploadPath)) {
+			try {
+				Files.createDirectories(uploadPath);
+			} catch (IOException e) {
+				throw new RuntimeException("文件目录创建失败");
+			}
+		}
+
+		Path filePath = uploadPath.resolve(filename);
+		try {
+			Files.copy(file.getInputStream(), filePath);
+		} catch (IOException e) {
+			throw new RuntimeException("文件上传失败");
+		}
+
+		// 返回文件访问 URL (需要加上 api/v1 前缀，因为有 context-path)
+		String fileUrl = "/api/v1/files/avatars/" + filename;
+		return Result.success(fileUrl);
+	}
 }

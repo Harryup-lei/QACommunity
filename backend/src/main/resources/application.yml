@@ -68,6 +68,10 @@ server:
   port: 8080
   servlet:
     context-path: /api/v1
+  web:
+    resources:
+      static-locations: file:D:/code/ClaudeCode/QACommunity/files/
+      add-mappings: true
 
 # JWT 配置
 jwt:

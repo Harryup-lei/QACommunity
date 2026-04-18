@@ -98,7 +98,9 @@ const onSubmit = async () => {
 
     userStore.setToken(token)
 
-    const user = await userService.getUserInfo(userId)
+    // getUserInfo 也返回 Result 包装，需要取 data
+    const userResult = await userService.getUserInfo(userId)
+    const user = userResult?.data || userResult
     userStore.setUser(user)
 
     ElMessage.success('登录成功')

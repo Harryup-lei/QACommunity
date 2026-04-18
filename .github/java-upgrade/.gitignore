@@ -1,5 +1,7 @@
 test-frontend.ps1
 backend/target/
 .idea/
-.frontend/*.log
+frontend/*.log
+*.log
+
 

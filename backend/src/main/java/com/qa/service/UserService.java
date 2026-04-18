@@ -1,7 +1,9 @@
 package com.qa.service;
 
+import com.qa.common.Result;
 import com.qa.dto.UserDTO;
 import com.qa.entity.User;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 用户业务服务
@@ -47,4 +49,6 @@ public interface UserService {
      * 查询用户是否存在
      */
     boolean userExists(String username);
+
+	Result<String> uploadAvatar(MultipartFile file);
 }
